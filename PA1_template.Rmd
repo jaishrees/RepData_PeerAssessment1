@@ -37,6 +37,8 @@ Fork/clone the GitHub repository created for this assignment. You will submit th
 
 NOTE: The GitHub repository also contains the dataset for the assignment so you do not have to download the data separately.
 
+
+
 ## Loading and preprocessing the data
 ```{r}
 setwd("E:\\Jaishree\\Coursera\\6-ReproducibleResearch")
@@ -56,6 +58,12 @@ setwd("E:\\Jaishree\\Coursera\\6-ReproducibleResearch\\PeerAssessment1")
 csvdata <- read.csv("activity.csv\\activity.csv")
 ```
 
+```{r global_options, include=FALSE}
+## Set global options
+
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figure/',
+                      echo=FALSE, warning=FALSE, message=FALSE)
+```
 ## What is mean total number of steps taken per day?
 - For this part of the assignment, you can ignore the missing values in the dataset.
 - Calculate the total number of steps taken per day
@@ -63,7 +71,7 @@ csvdata <- read.csv("activity.csv\\activity.csv")
 - If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day
 - Calculate and report the mean and median of the total number of steps taken per day
 
-```{r}
+```{r 1_mean_total_number_of_steps_taken_per_day}
 ## ignore the missing values in the dataset
 complete_csvdata <- csvdata[complete.cases(csvdata),]
 
@@ -74,8 +82,10 @@ AggrSumByDay <- aggregate (x = complete_csvdata[c("steps")],
                                )
 
 ## output figure to ./figures/plot1.png
-png("./figures/plot1.png", width = 700, height = 600)
+# png("./figures/plot1.png", width = 700, height = 600)
+```
 
+```{r 1_Figure}
 ## create a histogram of the total number of steps taken each day
 hist(AggrSumByDay$steps,
      main = "histogram of the total number of steps taken each day", 
@@ -92,25 +102,8 @@ legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
        paste('Median: ', median(AggrSumByDay$steps)))
        )
 
-dev.off() 
+# dev.off() 
 
-## create a histogram of the total number of steps taken each day
-hist(AggrSumByDay$steps,
-    main = "histogram of the total number of steps taken each day", 
-    xlab = "number of steps" )
-
-
-
-#place lines for mean and median on histogram
-abline(v=mean(AggrSumByDay$steps), lwd = 3, col = 'blue')
-abline(v=median(AggrSumByDay$steps), lwd = 3, col = 'red')
-
-#create legend
-legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
-       cex = .8, 
-       legend = c(paste('Mean: ', mean(AggrSumByDay$steps)),
-       paste('Median: ', median(AggrSumByDay$steps)))
-       )
 ```
 
 The mean is `r mean(AggrSumByDay$steps)` and the median is `r median(AggrSumByDay$steps)`
@@ -120,7 +113,7 @@ The mean is `r mean(AggrSumByDay$steps)` and the median is `r median(AggrSumByDa
 - Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 
-```{r}
+```{r 2_average_daily_activity_pattern}
 ## We calculate the average number of steps taken in each 5-minute interval across all days.
 csvdata$interval <- as.factor(csvdata$interval)
 
@@ -131,18 +124,10 @@ step_average <- tapply(csvdata$steps,
                         simplify = TRUE)/length(levels(csvdata$date))
 
 ## output figure to ./figures/plot1.png
-png("./figures/plot2.png", width = 700, height = 600)
+# png("./figures/plot2.png", width = 700, height = 600)
+```
 
-
-## Make a time series plot of the average number of steps taken. 
-plot(main = "Average number of steps taken in 5-minute interval averaged across all days",
-     x = levels(csvdata$interval), 
-     y = step_average, 
-     type = "l", 
-     xlab = "time", 
-     ylab = "number of steps")
-
-dev.off()
+```{r 2_Figure}
 
 ## Make a time series plot of the average number of steps taken. 
 plot(main = "Average number of steps taken in 5-minute interval averaged across all days",
@@ -151,6 +136,8 @@ plot(main = "Average number of steps taken in 5-minute interval averaged across 
      type = "l", 
      xlab = "time", 
      ylab = "number of steps")
+
+# dev.off()
 
 ```    
 
@@ -177,7 +164,7 @@ The total number of rows with NS values is `r NumRowsWithNA`
 
 
 - Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
-```{r}
+```{r 3_Imputing_missing_values}
 ## Fill in all of the missing values in the dataset
 
 ## copy of original data
@@ -212,8 +199,10 @@ NewAggrSumByDay <- aggregate (x = ETLdata[c("steps")],
                                )
 
 ## output figure to ./figures/plot1.png
-png("./figures/plot3.png", width = 700, height = 600)
+# png("./figures/plot3.png", width = 700, height = 600)
+```
 
+```{r 3_Figure}
 par(mfrow = c(1, 2)) #REMEMBER THIS PLACES THE IMAGES IN NW, NE, SW, SE QUADRANT ORDER
 
 ## create a histogram of the total number of steps taken each day
@@ -247,41 +236,8 @@ legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
        paste('Median: ', median(AggrSumByDay$steps)))
        )
 
-dev.off()
+# dev.off()
 
-par(mfrow = c(1, 2)) #REMEMBER THIS PLACES THE IMAGES IN NW, NE, SW, SE QUADRANT ORDER
-
-## create a histogram of the total number of steps taken each day
-hist(NewAggrSumByDay$steps,
-     main = "New Histogram - NA values =0", 
-     xlab = "number of steps" )
-
-#place lines for mean and median on histogram
-abline(v=mean(NewAggrSumByDay$steps), lwd = 3, col = 'blue')
-abline(v=median(NewAggrSumByDay$steps), lwd = 3, col = 'red')
-
-#create legend
-legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
-       cex = .8, 
-       legend = c(paste('Mean: ', mean(NewAggrSumByDay$steps)),
-       paste('Median: ', median(NewAggrSumByDay$steps)))
-       )
-
-
-hist(AggrSumByDay$steps,
-     main = "Old Histogram - no NA values", 
-     xlab = "number of steps" )
-
-#place lines for mean and median on histogram
-abline(v=mean(AggrSumByDay$steps), lwd = 3, col = 'blue')
-abline(v=median(AggrSumByDay$steps), lwd = 3, col = 'red')
-
-#create legend
-legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
-       cex = .8, 
-       legend = c(paste('Mean: ', mean(AggrSumByDay$steps)),
-       paste('Median: ', median(AggrSumByDay$steps)))
-       )
 
 ```
 
@@ -298,7 +254,7 @@ For this part the weekdays() function may be of some help here. Use the dataset 
 
 - Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 
-```{r}
+```{r 4_differences_in_activity_patterns_weekdays_weekends}
 weekday <- weekdays(as.Date(ETLdata$date, "%Y-%m-%d"))
 for (i in 1:length(weekday)) {
     if ((weekday[i] == "Saturday") | (weekday[i] == "Sunday")) 
@@ -330,15 +286,14 @@ output <- data.frame(steps = c(step_average_weekday, step_average_weekend),
         length(step_average_weekday)), rep("weekend", length(step_average_weekend)))))
 
 ## output figure to ./figures/plot1.png
-png("./figures/plot4.png", width = 700, height = 600)
+# png("./figures/plot4.png", width = 700, height = 600)
+```
 
+```{r 4_Figure}
 library(lattice)
 xyplot(steps ~ interval | weekday, data = output, layout = c(1, 2), ylab = "number of steps", 
            main = "Average number of steps for all weekday days or weekend days")
 
-dev.off()
-
-xyplot(steps ~ interval | weekday, data = output, layout = c(1, 2), ylab = "number of steps", 
-           main = "Average number of steps for all weekday days or weekend days")
+# dev.off()
 
 ```

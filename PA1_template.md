@@ -31,6 +31,8 @@ Fork/clone the GitHub repository created for this assignment. You will submit th
 
 NOTE: The GitHub repository also contains the dataset for the assignment so you do not have to download the data separately.
 
+
+
 ## Loading and preprocessing the data
 
 ```r
@@ -51,6 +53,7 @@ setwd("E:\\Jaishree\\Coursera\\6-ReproducibleResearch\\PeerAssessment1")
 csvdata <- read.csv("activity.csv\\activity.csv")
 ```
 
+
 ## What is mean total number of steps taken per day?
 - For this part of the assignment, you can ignore the missing values in the dataset.
 - Calculate the total number of steps taken per day
@@ -59,64 +62,8 @@ csvdata <- read.csv("activity.csv\\activity.csv")
 - Calculate and report the mean and median of the total number of steps taken per day
 
 
-```r
-## ignore the missing values in the dataset
-complete_csvdata <- csvdata[complete.cases(csvdata),]
 
-## Calculate the total number of steps taken per day
-AggrSumByDay <- aggregate (x = complete_csvdata[c("steps")], 
-                               FUN = sum, 
-                               by = list(Group.date = complete_csvdata$date)
-                               )
-
-## output figure to ./figures/plot1.png
-png("./figures/plot1.png", width = 700, height = 600)
-
-## create a histogram of the total number of steps taken each day
-hist(AggrSumByDay$steps,
-     main = "histogram of the total number of steps taken each day", 
-     xlab = "number of steps" )
-
-#place lines for mean and median on histogram
-abline(v=mean(AggrSumByDay$steps), lwd = 3, col = 'blue')
-abline(v=median(AggrSumByDay$steps), lwd = 3, col = 'red')
-
-#create legend
-legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
-       cex = .8, 
-       legend = c(paste('Mean: ', mean(AggrSumByDay$steps)),
-       paste('Median: ', median(AggrSumByDay$steps)))
-       )
-
-dev.off() 
-```
-
-```
-## png 
-##   2
-```
-
-```r
-## create a histogram of the total number of steps taken each day
-hist(AggrSumByDay$steps,
-    main = "histogram of the total number of steps taken each day", 
-    xlab = "number of steps" )
-
-
-
-#place lines for mean and median on histogram
-abline(v=mean(AggrSumByDay$steps), lwd = 3, col = 'blue')
-abline(v=median(AggrSumByDay$steps), lwd = 3, col = 'red')
-
-#create legend
-legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
-       cex = .8, 
-       legend = c(paste('Mean: ', mean(AggrSumByDay$steps)),
-       paste('Median: ', median(AggrSumByDay$steps)))
-       )
-```
-
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+![](Figure/1_Figure-1.png) 
 
 The mean is 1.0766189\times 10^{4} and the median is 10765
 
@@ -126,61 +73,14 @@ The mean is 1.0766189\times 10^{4} and the median is 10765
 
 
 
-```r
-## We calculate the average number of steps taken in each 5-minute interval across all days.
-csvdata$interval <- as.factor(csvdata$interval)
 
-step_average <- tapply(csvdata$steps, 
-                        csvdata$interval, 
-                        sum, 
-                        na.rm = TRUE, 
-                        simplify = TRUE)/length(levels(csvdata$date))
-
-## output figure to ./figures/plot1.png
-png("./figures/plot2.png", width = 700, height = 600)
-
-
-## Make a time series plot of the average number of steps taken. 
-plot(main = "Average number of steps taken in 5-minute interval averaged across all days",
-     x = levels(csvdata$interval), 
-     y = step_average, 
-     type = "l", 
-     xlab = "time", 
-     ylab = "number of steps")
-
-dev.off()
-```
-
-```
-## png 
-##   2
-```
-
-```r
-## Make a time series plot of the average number of steps taken. 
-plot(main = "Average number of steps taken in 5-minute interval averaged across all days",
-     x = levels(csvdata$interval), 
-     y = step_average, 
-     type = "l", 
-     xlab = "time", 
-     ylab = "number of steps")
-```
-
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+![](Figure/2_Figure-1.png) 
 
 - Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 
-```r
-paste("This 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps"," ")
-```
-
 ```
 ## [1] "This 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps  "
-```
-
-```r
-names(which.max(step_average))
 ```
 
 ```
@@ -192,134 +92,14 @@ names(which.max(step_average))
 
 - Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
-```r
-## Find  the total number of rows with NAs
-NumRowsWithNA <- sum(!complete.cases(csvdata$steps))
-
-##display total number of rows with NAs
-# NumRowsWithNA
-```
 
 The total number of rows with NS values is 2304
 
 
 - Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
-```r
-## Fill in all of the missing values in the dataset
 
-## copy of original data
-Origdata = csvdata
-ETLdata = Origdata
-
-## Create an aggregate mean per interval and use that to fill in the empty values
-# AggrMeanPerInterval <- aggregate (x = complete_csvdata[c("steps")], 
-#                                  FUN = mean, 
-#                                  by = list(Interval = complete_csvdata$interval))
-
-
-# loop through each of the rows in AggrMeanPerInterval and get the mean for the interval and fill the NA values
-for (i in c(1:nrow(ETLdata))) { 
-    # If NA, then 
-    if (is.na(ETLdata[i, 1])) { 
-        
-        # temp <- ETLdata[i,3] # temp contains the interval value
-        ## fetch the mean and 
-        # meanValue <- AggrMeanPerInterval[AggrMeanPerInterval$Interval == ETLdata[i,"interval"], 2] 
-        
-        ## replace the NA value with the mean steps value for that interval times zero
-        ETLdata[i, "steps"] <- 0 #meanValue *0
-    }
-}
-
-
-## Calculate the total number of steps taken per day
-NewAggrSumByDay <- aggregate (x = ETLdata[c("steps")], 
-                               FUN = sum, 
-                               by = list(Group.date = ETLdata$date)
-                               )
-
-## output figure to ./figures/plot1.png
-png("./figures/plot3.png", width = 700, height = 600)
-
-par(mfrow = c(1, 2)) #REMEMBER THIS PLACES THE IMAGES IN NW, NE, SW, SE QUADRANT ORDER
-
-## create a histogram of the total number of steps taken each day
-hist(NewAggrSumByDay$steps,
-     main = "New Histogram - NA values =0", 
-     xlab = "number of steps" )
-#place lines for mean and median on histogram
-abline(v=mean(NewAggrSumByDay$steps), lwd = 3, col = 'blue')
-abline(v=median(NewAggrSumByDay$steps), lwd = 3, col = 'red')
-
-#create legend
-legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
-       cex = .8, 
-       legend = c(paste('Mean: ', mean(NewAggrSumByDay$steps)),
-       paste('Median: ', median(NewAggrSumByDay$steps)))
-       )
-
-
-hist(AggrSumByDay$steps,
-     main = "Old Histogram - no NA values", 
-     xlab = "number of steps" )
-
-#place lines for mean and median on histogram
-abline(v=mean(AggrSumByDay$steps), lwd = 3, col = 'blue')
-abline(v=median(AggrSumByDay$steps), lwd = 3, col = 'red')
-
-#create legend
-legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
-       cex = .8, 
-       legend = c(paste('Mean: ', mean(AggrSumByDay$steps)),
-       paste('Median: ', median(AggrSumByDay$steps)))
-       )
-
-dev.off()
-```
-
-```
-## png 
-##   2
-```
-
-```r
-par(mfrow = c(1, 2)) #REMEMBER THIS PLACES THE IMAGES IN NW, NE, SW, SE QUADRANT ORDER
-
-## create a histogram of the total number of steps taken each day
-hist(NewAggrSumByDay$steps,
-     main = "New Histogram - NA values =0", 
-     xlab = "number of steps" )
-
-#place lines for mean and median on histogram
-abline(v=mean(NewAggrSumByDay$steps), lwd = 3, col = 'blue')
-abline(v=median(NewAggrSumByDay$steps), lwd = 3, col = 'red')
-
-#create legend
-legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
-       cex = .8, 
-       legend = c(paste('Mean: ', mean(NewAggrSumByDay$steps)),
-       paste('Median: ', median(NewAggrSumByDay$steps)))
-       )
-
-
-hist(AggrSumByDay$steps,
-     main = "Old Histogram - no NA values", 
-     xlab = "number of steps" )
-
-#place lines for mean and median on histogram
-abline(v=mean(AggrSumByDay$steps), lwd = 3, col = 'blue')
-abline(v=median(AggrSumByDay$steps), lwd = 3, col = 'red')
-
-#create legend
-legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
-       cex = .8, 
-       legend = c(paste('Mean: ', mean(AggrSumByDay$steps)),
-       paste('Median: ', median(AggrSumByDay$steps)))
-       )
-```
-
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+![](Figure/3_Figure-1.png) 
 
 New Mean(after replacing NA values with zero): 9354.2295082, Old Mean(after eliminating NA Values): 1.0766189\times 10^{4}
 
@@ -335,55 +115,5 @@ For this part the weekdays() function may be of some help here. Use the dataset 
 - Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 
 
-```r
-weekday <- weekdays(as.Date(ETLdata$date, "%Y-%m-%d"))
-for (i in 1:length(weekday)) {
-    if ((weekday[i] == "Saturday") | (weekday[i] == "Sunday")) 
-        weekday[i] = "weekend" else weekday[i] = "weekday"
-}
-ETLdata$weekday <- as.factor(weekday)
 
-## Then we make a panel plot containing a time series plot of the average number of of steps taken in each 5-minute interval across all weekday days or weekend days.
-
-ETLdata_split <- split(ETLdata, ETLdata$weekday)
-ETLdata_weekday <- ETLdata_split$weekday
-ETLdata_weekend <- ETLdata_split$weekend
-
-step_average_weekday <- tapply(ETLdata_weekday$steps, 
-                               ETLdata_weekday$interval, 
-                               sum, 
-                               simplify = TRUE)/
-                              (length(ETLdata_weekday$weekday)/288)
-
-
-step_average_weekend <- tapply(ETLdata_weekend$steps, 
-                               ETLdata_weekend$interval, 
-                               sum, 
-                               simplify = TRUE)/
-                              (length(ETLdata_weekend$weekday)/288)
-
-output <- data.frame(steps = c(step_average_weekday, step_average_weekend), 
-    interval = c(levels(csvdata$interval), levels(csvdata$interval)), weekday = as.factor(c(rep("weekday", 
-        length(step_average_weekday)), rep("weekend", length(step_average_weekend)))))
-
-## output figure to ./figures/plot1.png
-png("./figures/plot4.png", width = 700, height = 600)
-
-library(lattice)
-xyplot(steps ~ interval | weekday, data = output, layout = c(1, 2), ylab = "number of steps", 
-           main = "Average number of steps for all weekday days or weekend days")
-
-dev.off()
-```
-
-```
-## png 
-##   2
-```
-
-```r
-xyplot(steps ~ interval | weekday, data = output, layout = c(1, 2), ylab = "number of steps", 
-           main = "Average number of steps for all weekday days or weekend days")
-```
-
-![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
+![](Figure/4_Figure-1.png) 
