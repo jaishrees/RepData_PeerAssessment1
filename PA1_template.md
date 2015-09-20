@@ -1,12 +1,6 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-author: "Jaishree Raman"
-date: "Sunday, Sept 20, 2015"
-
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
+Jaishree Raman  
+Sunday, Sept 20, 2015  
 ## Overview
 This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
 
@@ -38,7 +32,8 @@ Fork/clone the GitHub repository created for this assignment. You will submit th
 NOTE: The GitHub repository also contains the dataset for the assignment so you do not have to download the data separately.
 
 ## Loading and preprocessing the data
-```{r}
+
+```r
 setwd("E:\\Jaishree\\Coursera\\6-ReproducibleResearch")
 
 
@@ -63,7 +58,8 @@ csvdata <- read.csv("activity.csv\\activity.csv")
 - If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day
 - Calculate and report the mean and median of the total number of steps taken per day
 
-```{r}
+
+```r
 ## ignore the missing values in the dataset
 complete_csvdata <- csvdata[complete.cases(csvdata),]
 
@@ -82,22 +78,31 @@ hist(AggrSumByDay$steps,
      xlab = "number of steps" )
 
 dev.off() 
+```
 
+```
+## png 
+##   2
+```
+
+```r
 ## create a histogram of the total number of steps taken each day
 hist(AggrSumByDay$steps,
      main = "histogram of the total number of steps taken each day", 
      xlab = "number of steps" )
-
 ```
 
-The mean is `r mean(AggrSumByDay$steps)` and the median is `r median(AggrSumByDay$steps)`
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
+The mean is 1.0766189\times 10^{4} and the median is 10765
 
 
 ## What is the average daily activity pattern?
 - Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 
-```{r}
+
+```r
 ## We calculate the average number of steps taken in each 5-minute interval across all days.
 csvdata$interval <- as.factor(csvdata$interval)
 
@@ -120,7 +125,14 @@ plot(main = "Average number of steps taken in 5-minute interval averaged across 
      ylab = "number of steps")
 
 dev.off()
+```
 
+```
+## png 
+##   2
+```
+
+```r
 ## Make a time series plot of the average number of steps taken. 
 plot(main = "Average number of steps taken in 5-minute interval averaged across all days",
      x = levels(csvdata$interval), 
@@ -128,21 +140,35 @@ plot(main = "Average number of steps taken in 5-minute interval averaged across 
      type = "l", 
      xlab = "time", 
      ylab = "number of steps")
+```
 
-```    
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 - Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-```{r}
+
+```r
 paste("This 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps"," ")
+```
+
+```
+## [1] "This 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps  "
+```
+
+```r
 names(which.max(step_average))
-```   
+```
+
+```
+## [1] "835"
+```
    
 ## Imputing missing values
 - Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
 
 - Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
-```{r}
+
+```r
 ## Find  the total number of rows with NAs
 NumRowsWithNA <- sum(!complete.cases(csvdata$steps))
 
@@ -150,11 +176,12 @@ NumRowsWithNA <- sum(!complete.cases(csvdata$steps))
 # NumRowsWithNA
 ```
 
-The total number of rows with NS values is `r NumRowsWithNA`
+The total number of rows with NS values is 2304
 
 
 - Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
-```{r}
+
+```r
 ## Fill in all of the missing values in the dataset
 
 ## copy of original data
@@ -203,21 +230,33 @@ hist(AggrSumByDay$steps,
      xlab = "number of steps" )
 
 dev.off()
+```
 
+```
+## png 
+##   2
+```
+
+```r
 ## create a histogram of the total number of steps taken each day
 hist(NewAggrSumByDay$steps,
      main = "New Histogram - NA values =0", 
      xlab = "number of steps" )
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+
+```r
 hist(AggrSumByDay$steps,
      main = "Old Histogram - no NA values", 
      xlab = "number of steps" )
-
 ```
 
-New Mean(after replacing NA values with zero): `r mean(NewAggrSumByDay$steps)`, Old Mean(after eliminating NA Values): `r mean(AggrSumByDay$steps)`
+![](PA1_template_files/figure-html/unnamed-chunk-6-2.png) 
 
-New Median(after replacing NA values with zero): `r median(NewAggrSumByDay$steps)`, Old Median(after eliminating NA Values): `r median(AggrSumByDay$steps)`
+New Mean(after replacing NA values with zero): 9354.2295082, Old Mean(after eliminating NA Values): 1.0766189\times 10^{4}
+
+New Median(after replacing NA values with zero): 1.0395\times 10^{4}, Old Median(after eliminating NA Values): 10765
 
 Imputing Missing data caused the mean and median to decrease, since the NA values which were previously eliminated were now counted in as zeros, thereby causing the denominator to increase in calculating the mean.
 
@@ -228,7 +267,8 @@ For this part the weekdays() function may be of some help here. Use the dataset 
 
 - Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 
-```{r}
+
+```r
 weekday <- weekdays(as.Date(ETLdata$date, "%Y-%m-%d"))
 for (i in 1:length(weekday)) {
     if ((weekday[i] == "Saturday") | (weekday[i] == "Sunday")) 
@@ -267,8 +307,16 @@ xyplot(steps ~ interval | weekday, data = output, layout = c(1, 2), ylab = "numb
            main = "Average number of steps for all weekday days or weekend days")
 
 dev.off()
-
-xyplot(steps ~ interval | weekday, data = output, layout = c(1, 2), ylab = "number of steps", 
-           main = "Average number of steps for all weekday days or weekend days")
+```
 
 ```
+## png 
+##   2
+```
+
+```r
+xyplot(steps ~ interval | weekday, data = output, layout = c(1, 2), ylab = "number of steps", 
+           main = "Average number of steps for all weekday days or weekend days")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
