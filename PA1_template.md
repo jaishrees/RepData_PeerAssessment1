@@ -77,6 +77,17 @@ hist(AggrSumByDay$steps,
      main = "histogram of the total number of steps taken each day", 
      xlab = "number of steps" )
 
+#place lines for mean and median on histogram
+abline(v=mean(AggrSumByDay$steps), lwd = 3, col = 'blue')
+abline(v=median(AggrSumByDay$steps), lwd = 3, col = 'red')
+
+#create legend
+legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
+       cex = .8, 
+       legend = c(paste('Mean: ', mean(AggrSumByDay$steps)),
+       paste('Median: ', median(AggrSumByDay$steps)))
+       )
+
 dev.off() 
 ```
 
@@ -88,8 +99,21 @@ dev.off()
 ```r
 ## create a histogram of the total number of steps taken each day
 hist(AggrSumByDay$steps,
-     main = "histogram of the total number of steps taken each day", 
-     xlab = "number of steps" )
+    main = "histogram of the total number of steps taken each day", 
+    xlab = "number of steps" )
+
+
+
+#place lines for mean and median on histogram
+abline(v=mean(AggrSumByDay$steps), lwd = 3, col = 'blue')
+abline(v=median(AggrSumByDay$steps), lwd = 3, col = 'red')
+
+#create legend
+legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
+       cex = .8, 
+       legend = c(paste('Mean: ', mean(AggrSumByDay$steps)),
+       paste('Median: ', median(AggrSumByDay$steps)))
+       )
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
@@ -224,10 +248,32 @@ par(mfrow = c(1, 2)) #REMEMBER THIS PLACES THE IMAGES IN NW, NE, SW, SE QUADRANT
 hist(NewAggrSumByDay$steps,
      main = "New Histogram - NA values =0", 
      xlab = "number of steps" )
+#place lines for mean and median on histogram
+abline(v=mean(NewAggrSumByDay$steps), lwd = 3, col = 'blue')
+abline(v=median(NewAggrSumByDay$steps), lwd = 3, col = 'red')
+
+#create legend
+legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
+       cex = .8, 
+       legend = c(paste('Mean: ', mean(NewAggrSumByDay$steps)),
+       paste('Median: ', median(NewAggrSumByDay$steps)))
+       )
+
 
 hist(AggrSumByDay$steps,
      main = "Old Histogram - no NA values", 
      xlab = "number of steps" )
+
+#place lines for mean and median on histogram
+abline(v=mean(AggrSumByDay$steps), lwd = 3, col = 'blue')
+abline(v=median(AggrSumByDay$steps), lwd = 3, col = 'red')
+
+#create legend
+legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
+       cex = .8, 
+       legend = c(paste('Mean: ', mean(AggrSumByDay$steps)),
+       paste('Median: ', median(AggrSumByDay$steps)))
+       )
 
 dev.off()
 ```
@@ -238,21 +284,42 @@ dev.off()
 ```
 
 ```r
+par(mfrow = c(1, 2)) #REMEMBER THIS PLACES THE IMAGES IN NW, NE, SW, SE QUADRANT ORDER
+
 ## create a histogram of the total number of steps taken each day
 hist(NewAggrSumByDay$steps,
      main = "New Histogram - NA values =0", 
      xlab = "number of steps" )
-```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+#place lines for mean and median on histogram
+abline(v=mean(NewAggrSumByDay$steps), lwd = 3, col = 'blue')
+abline(v=median(NewAggrSumByDay$steps), lwd = 3, col = 'red')
 
-```r
+#create legend
+legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
+       cex = .8, 
+       legend = c(paste('Mean: ', mean(NewAggrSumByDay$steps)),
+       paste('Median: ', median(NewAggrSumByDay$steps)))
+       )
+
+
 hist(AggrSumByDay$steps,
      main = "Old Histogram - no NA values", 
      xlab = "number of steps" )
+
+#place lines for mean and median on histogram
+abline(v=mean(AggrSumByDay$steps), lwd = 3, col = 'blue')
+abline(v=median(AggrSumByDay$steps), lwd = 3, col = 'red')
+
+#create legend
+legend('topright', lty = 1, lwd = 3, col = c("blue", "red"),
+       cex = .8, 
+       legend = c(paste('Mean: ', mean(AggrSumByDay$steps)),
+       paste('Median: ', median(AggrSumByDay$steps)))
+       )
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-2.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
 
 New Mean(after replacing NA values with zero): 9354.2295082, Old Mean(after eliminating NA Values): 1.0766189\times 10^{4}
 
